@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-  twitchquery
+  twitchchannelquery
 
   Get Twitch channel online data easily.
 """
