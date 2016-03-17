@@ -6,7 +6,8 @@
 from twitchchannelquery import twitchchannelquery
 
 channel = twitchchannelquery()
-channel.setup('https://api.twitch.tv/kraken/streams/LuppiiMC')
+# arg1 is cahnnel and arg2 is follower nr (from the end)
+channel.setup('Food', '1')
 channel.query()
 
 if channel.is_online():
@@ -18,5 +19,8 @@ if channel.is_online():
     print("Viewers:", channel.get_viewers())
     print("Total views:", channel.get_views())
     print("Followers:", channel.get_followers())
+    print("Follower:", channel.get_follower())
+    print("Follower since:", channel.get_followed())
+    print("follower got notification:", channel.get_notification())
 else:
     print("Channel is offline.")
