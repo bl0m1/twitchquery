@@ -26,9 +26,9 @@ class twitchchannelquery(object):
         * viewers: Current amount of viewers on channel.
         * followers: Amount of followers for channel.
         * status: Status (title) message of stream.
-        * follower: get a follower.
-        * followed: Status (title) message of stream.
-        * notification: Status (title) message of stream.
+        * follower: Get a follower.
+        * followed: Get date when the follower followed you.
+        * notification: If the follower getting an notification when the channel go live.
     """
 
     # pylint: disable=too-many-instance-attributes
@@ -38,6 +38,8 @@ class twitchchannelquery(object):
         """ Initialization. """
         self.url = ("https://api.twitch.tv/kraken/streams/" + channel + "/")
         self.furl =  'https://api.twitch.tv/kraken/channels/' + channel + '/follows?direction=DESC&limit=1&offset=0'
+        self.offset = 0
+        self.limit = 1
         self.online = False
         self.error = False
         self.raw = requests.Response()
@@ -56,10 +58,10 @@ class twitchchannelquery(object):
         self.followed = ""
         self.notification = ""
 
-    def setup(self, channel="", follownr=""):
+    def setup(self, channel="", offset="", limit=""):
         """ Config. """
         self.url = "https://api.twitch.tv/kraken/streams/" + channel + "/"
-        self.furl =  'https://api.twitch.tv/kraken/channels/' + channel + '/follows?direction=DESC&limit=' + follownr + '&offset=0'
+        self.furl =  'https://api.twitch.tv/kraken/channels/' + channel + '/follows?direction=DESC&limit=' + limit + '&offset=' + offset
 
     def reset(self):
         """ Reset variables """

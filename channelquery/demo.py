@@ -7,7 +7,7 @@ from twitchchannelquery import twitchchannelquery
 
 channel = twitchchannelquery()
 # arg1 is cahnnel and arg2 is follower nr (from the end)
-channel.setup('Food', '1')
+channel.setup('Food', '0')
 channel.query()
 
 if channel.is_online():
