@@ -26,20 +26,19 @@ class twitchchannelquery(object):
         * viewers: Current amount of viewers on channel.
         * followers: Amount of followers for channel.
         * status: Status (title) message of stream.
-        * follower: Get a follower.
-        * followed: Get date when the follower followed you.
-        * notification: If the follower getting an notification when the channel go live.
+        * follower_name: Get a followers name.
+        * follower_date: Get date when the follower followed you.
+        * follower_notification: If the follower getting an notification when the channel go live.
+        * follower_list: get array whit all users you selected, maximum 50.
     """
 
     # pylint: disable=too-many-instance-attributes
     # The amount of attributes is just fine.
 
-    def __init__(self, channel=""):
+    def __init__(self):
         """ Initialization. """
-        self.url = ("https://api.twitch.tv/kraken/streams/" + channel + "/")
-        self.furl =  'https://api.twitch.tv/kraken/channels/' + channel + '/follows?direction=DESC&limit=1&offset=0'
-        self.offset = 0
-        self.limit = 1
+        self.url = ""
+        self.furl =  ""
         self.online = False
         self.error = False
         self.raw = requests.Response()
@@ -54,12 +53,17 @@ class twitchchannelquery(object):
         self.viewers = ""
         self.followers = ""
         self.status = ""
-        self.follower = ""
-        self.followed = ""
-        self.notification = ""
+        self.follower_name = ""
+        self.follower_date = ""
+        self.follower_notification = ""
+        self.follower_list = ""
 
-    def setup(self, channel="", offset="", limit=""):
+    def setup(self, channel="", limit="", offset=""):
         """ Config. """
+        if len(limit) == 0:
+            limit = "1"
+        if len(offset) == 0:
+            offset = "0"
         self.url = "https://api.twitch.tv/kraken/streams/" + channel + "/"
         self.furl =  'https://api.twitch.tv/kraken/channels/' + channel + '/follows?direction=DESC&limit=' + limit + '&offset=' + offset
 
@@ -79,9 +83,10 @@ class twitchchannelquery(object):
         self.viewers = ""
         self.followers = ""
         self.status = ""
-        self.follower = ""
-        self.followed = ""
-        self.notification = ""
+        self.follower_name = ""
+        self.follower_date = ""
+        self.follower_notification = ""
+        self.follower_list = ""
 
     def get_raw(self):
         """ Return raw requests data. """
@@ -127,17 +132,21 @@ class twitchchannelquery(object):
         """ Return status message for stream. """
         return self.status
 
-    def get_follower(self):
+    def get_follower_name(self):
         """ Return amount of followers for channel """
-        return self.follower
+        return self.follower_name
 
-    def get_followed(self):
+    def get_follower_date(self):
         """ Return the selected follower """
-        return self.followed
+        return self.follower_date
 
-    def get_notification(self):
+    def get_follower_notification(self):
         """ Return the selected follower """
-        return self.notification
+        return self.follower_notification
+
+    def get_follower_list(self):
+        """ Return the selected follower """
+        return self.follower_list
 
     def send_query(self):
         """ Request URL. """
@@ -170,9 +179,10 @@ class twitchchannelquery(object):
             self.viewers = data["stream"]["viewers"]
             self.followers = data["stream"]["channel"]["followers"]
             self.status = data["stream"]["channel"]["status"]
-            self.follower = fdata['follows'][0]['user']['display_name']
-            self.followed = fdata['follows'][0]['created_at']
-            self.notification = fdata['follows'][0]['notifications']
+            self.follower_name = fdata['follows'][0]['user']['display_name']
+            self.follower_date = fdata['follows'][0]['created_at']
+            self.follower_notification = fdata['follows'][0]['notifications']
+            self.follower_list = fdata['follows']
 
     def query(self):
         """ Query Twitch for channel. """
