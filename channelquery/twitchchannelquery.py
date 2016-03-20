@@ -184,7 +184,19 @@ class twitchchannelquery(object):
             self.follower_notification = fdata['follows'][0]['notifications']
             self.follower_list = fdata['follows']
 
+    def parse_response_follower(self, fdata):
+        """ Parse response into variables. """
+        if "error" in fdata:
+            self.error = True
+        else:
+            self.follower_list = fdata['follows']
+
     def query(self):
         """ Query Twitch for channel. """
         if self.send_query():
             self.parse_response(self.jsondata, self.jsonfdata)
+
+    def query_follower_list(self):
+        """ Query Twitch for channel. """
+        if self.send_query():
+            self.parse_response_follower(self.jsonfdata)
