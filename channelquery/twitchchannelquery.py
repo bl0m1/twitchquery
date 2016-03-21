@@ -26,10 +26,7 @@ class twitchchannelquery(object):
         * viewers: Current amount of viewers on channel.
         * followers: Amount of followers for channel.
         * status: Status (title) message of stream.
-        * follower_name: Get a followers name.
-        * follower_date: Get date when the follower followed you.
-        * follower_notification: If the follower getting an notification when the channel go live.
-        * follower_list: get array whit all users you selected, maximum 50.
+        * follower_list: get array whit all users you selected, maximum 100.
     """
 
     # pylint: disable=too-many-instance-attributes
@@ -41,6 +38,7 @@ class twitchchannelquery(object):
         self.furl =  ""
         self.online = False
         self.error = False
+        self.follower_ready = False
         self.raw = requests.Response()
         self.fraw = requests.Response()
         self.jsondata = ""
@@ -53,10 +51,7 @@ class twitchchannelquery(object):
         self.viewers = ""
         self.followers = ""
         self.status = ""
-        self.follower_name = ""
-        self.follower_date = ""
-        self.follower_notification = ""
-        self.follower_list = ""
+        self.followers_list = ""
 
     def setup(self, channel="", limit="", offset=""):
         """ Config. """
@@ -71,6 +66,7 @@ class twitchchannelquery(object):
         """ Reset variables """
         self.online = False
         self.error = False
+        self.follower_ready = False
         self.raw = requests.Response()
         self.fraw = requests.Response()
         self.jsondata = ""
@@ -83,10 +79,7 @@ class twitchchannelquery(object):
         self.viewers = ""
         self.followers = ""
         self.status = ""
-        self.follower_name = ""
-        self.follower_date = ""
-        self.follower_notification = ""
-        self.follower_list = ""
+        self.followers_list = ""
 
     def get_raw(self):
         """ Return raw requests data. """
@@ -132,27 +125,28 @@ class twitchchannelquery(object):
         """ Return status message for stream. """
         return self.status
 
-    def get_follower_name(self):
-        """ Return amount of followers for channel """
-        return self.follower_name
-
-    def get_follower_date(self):
+    def get_followers_list(self):
         """ Return the selected follower """
-        return self.follower_date
+        return self.followers_list
 
-    def get_follower_notification(self):
+    def get_follower_ready(self):
         """ Return the selected follower """
-        return self.follower_notification
+        return self.follower_ready
 
-    def get_follower_list(self):
-        """ Return the selected follower """
-        return self.follower_list
-
-    def send_query(self):
-        """ Request URL. """
+    def send_query_channel(self):
+        """ Request Channel URL. """
         try:
             self.raw = requests.get(self.url)
             self.jsondata = self.raw.json()
+        except ConnectionError:
+            return False
+        except requests.exceptions.HTTPError:
+            return False
+        return True
+
+    def send_query_followers(self):
+        """ Request Follower URL. """
+        try:
             self.fraw = requests.get(self.furl)
             self.jsonfdata = self.fraw.json()
         except ConnectionError:
@@ -164,8 +158,6 @@ class twitchchannelquery(object):
     def parse_response(self, data, fdata):
         """ Parse response into variables. """
         if "error" in data:
-            self.error = True
-        elif "error" in fdata:
             self.error = True
         elif data["stream"] is None:
             pass
@@ -179,24 +171,21 @@ class twitchchannelquery(object):
             self.viewers = data["stream"]["viewers"]
             self.followers = data["stream"]["channel"]["followers"]
             self.status = data["stream"]["channel"]["status"]
-            self.follower_name = fdata['follows'][0]['user']['display_name']
-            self.follower_date = fdata['follows'][0]['created_at']
-            self.follower_notification = fdata['follows'][0]['notifications']
-            self.follower_list = fdata['follows']
 
-    def parse_response_follower(self, fdata):
+    def parse_response_followers(self, fdata):
         """ Parse response into variables. """
         if "error" in fdata:
             self.error = True
         else:
-            self.follower_list = fdata['follows']
+            self.follower_ready = True
+            self.followers_list = fdata['follows']
 
-    def query(self):
-        """ Query Twitch for channel. """
-        if self.send_query():
+    def query_channel(self):
+        """ Query Twitch for channel api. """
+        if self.send_query_channel():
             self.parse_response(self.jsondata, self.jsonfdata)
 
-    def query_follower_list(self):
-        """ Query Twitch for channel. """
-        if self.send_query():
-            self.parse_response_follower(self.jsonfdata)
+    def query_followers(self):
+        """ Query Twitch for follower api. """
+        if self.send_query_followers():
+            self.parse_response_followers(self.jsonfdata)

@@ -6,9 +6,10 @@
 from twitchchannelquery import twitchchannelquery
 
 channel = twitchchannelquery()
-# arg1 is cahnnel, arg2 is follower limit(default 1) and arg3 is follower offset(default 0) (max 50)
-channel.setup('monstercat', '2')
-channel.query()
+# arg1 is cahnnel, arg2 is follower limit (default 1, max 100) and arg3 is follower offset (default 0)
+channel.setup('monstercat')
+channel.query_channel()
+channel.query_followers()
 
 if channel.is_online():
     print("Channel is online.")
@@ -20,9 +21,11 @@ if channel.is_online():
     print("Viewers:", channel.get_viewers())
     print("Total views:", channel.get_views())
     print("Followers:", channel.get_followers())
-    print("Follower:", channel.get_follower_name())
-    print("Follower since:", channel.get_follower_date())
-    print("follower got notification:", channel.get_follower_notification())
-    #print("Follower list:", channel.get_follower_list())
 else:
     print("Channel is offline.")
+
+if channel.get_follower_ready():
+        print("Latest follower:", channel.get_followers_list()[0]["user"]["display_name"])
+        print("Follower since:", channel.get_followers_list()[0]["created_at"])
+        print("follower got notification:", channel.get_followers_list()[0]["notifications"])
+        #print("Follower list:", channel.get_followers_list())
