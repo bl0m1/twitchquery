@@ -7,7 +7,7 @@ from twitchchannelquery import twitchchannelquery
 
 channel = twitchchannelquery()
 # arg1 is cahnnel, arg2 is follower limit (default 1, max 100) and arg3 is follower offset (default 0)
-channel.setup('monstercat')
+channel.setup('LuppiiMC')
 channel.query_channel()
 channel.query_followers()
 

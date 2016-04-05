@@ -26,7 +26,7 @@ class twitchchannelquery(object):
         * viewers: Current amount of viewers on channel.
         * followers: Amount of followers for channel.
         * status: Status (title) message of stream.
-        * follower_list: get array whit all users you selected, maximum 100.
+        * follower_list: get array whit all followers you selected, maximum 100.
     """
 
     # pylint: disable=too-many-instance-attributes
@@ -60,7 +60,7 @@ class twitchchannelquery(object):
         if len(offset) == 0:
             offset = "0"
         self.url = "https://api.twitch.tv/kraken/streams/" + channel + "/"
-        self.furl =  'https://api.twitch.tv/kraken/channels/' + channel + '/follows?direction=DESC&limit=' + limit + '&offset=' + offset
+        self.furl =  "https://api.twitch.tv/kraken/channels/" + channel + "/follows?direction=DESC&limit=" + limit + "&offset=" + offset
 
     def reset(self):
         """ Reset variables """
