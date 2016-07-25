@@ -6,4 +6,4 @@ twitchquery is a collection of Python 3 scripts used for querying various parts 
 * [Requests](http://docs.python-requests.org/en/latest/) 2.4.2 or higher.
 
 # Usage
-Chech the demo.py file.
+Check the demo.py file.
