@@ -53,14 +53,14 @@ class twitchchannelquery(object):
         self.status = ""
         self.followers_list = ""
 
-    def setup(self, channel="", limit="", offset=""):
+    def setup(self, channel="", oauthtoken="", limit="", offset=""):
         """ Config. """
         if len(limit) == 0:
             limit = "1"
         if len(offset) == 0:
             offset = "0"
-        self.url = "https://api.twitch.tv/kraken/streams/" + channel + "/"
-        self.furl =  "https://api.twitch.tv/kraken/channels/" + channel + "/follows?direction=DESC&limit=" + limit + "&offset=" + offset
+        self.url = "https://api.twitch.tv/kraken/streams/" + channel + "/?oauth_token=" + oauthtoken
+        self.furl =  "https://api.twitch.tv/kraken/channels/" + channel + "/follows?direction=DESC&limit=" + limit + "&offset=" + offset + "&oauth_token=" + oauthtoken
 
     def reset(self):
         """ Reset variables """

@@ -6,10 +6,10 @@
 from twitchchannelquery import twitchchannelquery
 
 channel = twitchchannelquery()
-# arg1 is cahnnel, arg2 is follower limit (default 1, max 100) and arg3 is follower offset (default 0)
-channel.setup('LuppiiMC')
+# arg1 is cahnnel,arg2 is oathtoken, arg3 is follower limit (default 1, max 100) and arg4 is follower offset (default 0)
+channel.setup('geekslive', 'oauthtoken_here')
 channel.query_channel()
-channel.query_followers()
+#channel.query_followers()
 
 if channel.is_online():
     print("Channel is online.")
